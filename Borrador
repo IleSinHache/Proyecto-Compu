@@ -17,7 +17,7 @@ double distanciaMaxima (double x0, double y0, double X, double Y, int N) {
 		//la distancia máxima.
 		
 		if (distancia>disMax){
-			 distancia=disMax;
+			 disMax=distancia;
 		}     
 	}
 	
@@ -37,7 +37,7 @@ double distanciaMinima (double x0, double y0, double X, double Y, int N) {
 		//la distancia mínima.
 		
 		if (distancia<disMin){
-			 distancia=disMin;
+			 disMin=distancia;
 		}     
 	}
 	
