@@ -1,4 +1,90 @@
 #include<stdio.h>
+#include<math.h>
+#include<iostream.h>
+
+void 
+calculo_campo( double x0, double y_0, double* X, double* Y, double* Q, const int N, double& Ex, double& Ey);
+{
+	int i;
+	double r3, xi, yi;
+	Ex = 0.0 ;
+	Ey = 0.0;
+	for(i=0; i<N ; i++)
+	
+	{
+	xi = x0 - X[i]; // Es la distancia entre el punto inicial y la carga en x
+	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
+	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+	Ex = Ex + Q[i]*xi*r3;
+	Ey = Ey + Q[i]*yi*r3;		
+	}
+}
+
+void 
+maximo_minimo ( double x0, double y0, double* X, double* Y, const int N , double& rmin, double& rmax);
+{
+    int i;
+	double r;
+	rmax = 0.0;
+	rmin = 1000.0;
+	for (i=0; i<N; i++)
+	{
+		
+		r= sqrt(       pow(    (x0 - X[i])   , 2 )  + pow(    (y0 - Y[i])    , 2  )      );
+		/*medimos las distancias de nuestro punto inicial a las cargas, entonces nosotros 
+		queremos queremos la distancia  "rmin" más corta de nuestro punto inicial a la carga y también 
+		queremos saber la distancia "rmax" de la particula que está más lejos 
+		*/
+		if (r > rmax)    rmax = r;
+		if (r < rmin)    rmin = r;                                            
+		
+	}
+
+}
+
+
+
+
+
+
+
+void
+lineas_campo(double x , double y, double* X, double* Y, double* Q, const int N);
+
+{
+	const double  paso = 0.01;
+	const double  max_dist = 20.0;
+	int            i, direccion ;
+	double         x0, y0;
+	double         rmin, rmax, r, dx, dy,dl;
+	double          Ex, Ey, E;	
+	
+	for(direccion = -1; direccion<= 1; direccion +=2)
+	{
+		dl = direction * step;
+		x0 = xin;
+		y0 = yin;
+		dx = 0.0;
+		dy = 0.0;
+		mdist(x0, y0, X, Y, N, rmin, rmax);
+		while (rmin> (2.0*step) && rmax < max_dist)
+		{
+			printf("%d, %d \n", x0, y0);
+			E = sqrt(Ex*Ex +Ey*Ey);
+			if(E<= 1.0 e-10)
+			{
+				 break;
+			}
+			
+			dx = dl*Ex/E;
+			dy = dl*Ey/E;
+			x0 = x0 + dx;
+			y0 = y0 + dy;
+			mdist(x0, y0, X, Y, N, rmin, rmax);
+		}
+	}	
+}
+
 
 int main (){
 	int numCargas,numLineas; i;
