@@ -2,62 +2,6 @@
 #include<math.h>
 #include<iostream>
 
-double calculo_campo_x( double x0, double y0, double X[], double Y[], double Q[], int N);
-
-
-
- double calculo_campo_y( double x0, double y0, double X[], double Y[], double Q[], int N);
-
-
-
-int main ()
-{
-	int N,numLineas, i;
-	double Q[100], X[100], Y[100];
-	double x0,y0;
-	 double Ex, Ey;
-	
-	printf("Ingrese el numero de cargas (menor o igual a 100):\n");
-	scanf("%i",&N);
-	
-	printf("Ingrese el valor de cada carga (en Coulombs).\n");	
-	for (i=0;i<N;i++){
-		printf("Carga %i = ",i+1);
-		scanf("%lf",&Q[i]);
-		printf("\n");
-	}
-	
-	printf("Ingrese la coordenada en x para:\n");
-	for (i=0;i<N;i++){
-		printf("Carga %i: ",i+1);
-		scanf("%lf",&X[i]);
-		printf("\n");
-	}
-	
-	printf("Ingrese la coordenada en y para:\n");
-	for (i=0;i<N;i++){
-		printf("Carga %i: ",i+1);
-		scanf("%lf",&Y[i]);
-		printf("\n");
-	}
-
-	printf("Cuantas lineas desea dibujar?\n");
-	scanf("%i",&numLineas);
-	
-	printf("Ingrese la coordenada en x del punto de referencia:");
-	scanf("%f",&x0);
-	
-	printf("Ingrese la coordenada en y del punto de referencia:");
-	scanf("%f",&y0);
-	
-
-		printf("Aquí están los campos :p Ex= %f y Ey= %f", calculo_campo_x( x0, y0, X, Y, Q, N), calculo_campo_y( x0, y0, X, Y, Q, N) );
-		
-	
-}
-
-
-
 
  double calculo_campo_x( double x0, double y0, double X[], double Y[], double Q[], int N)
 {
@@ -93,6 +37,45 @@ int main ()
 	Ey = Ey + Q[i]*yi*r3;		
 	}
 	return Ey;
+}
+
+//FUNCIONES DISTANCIA// 
+
+float distanciaMaxima (float x0, float y0, float X[], float Y[], int N) {
+    int i;
+	float distancia,disMax = 0.0;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
+		
+		//Medimos la distancia del punto inicial a cada carga y determinamos
+		//la distancia máxima.
+		
+		if (distancia>disMax){
+			disMax=distancia;
+		}     
+	}
+	
+	return disMax;
+}
+
+float distanciaMinima (float x0, float y0, float X[], float Y[], int N) {
+    int i;
+	float distancia, disMin = 1000;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
+		
+		//Medimos la distancia del punto inicial a cada carga y determinamos
+		//la distancia mínima.
+		
+		if (distancia<disMin){
+			 disMin=distancia;
+		}     
+		
+		return disMin;
 }
 
 
