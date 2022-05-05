@@ -3,20 +3,18 @@
 #include<iostream.h>
 
 void 
-calculo_campo( double x0, double y_0, double* X, double* Y, double* Q, const int N);
+calculo_campo( double x0, double y0, double* X, double* Y, double* Q, const int N);
 {
 	int i;
 	double r3, xi, yi;
 	Ex = 0.0 ;
 	Ey = 0.0;
-	for(i=0; i<N ; i++)
-	
-	{
-	xi = x0 - X[i]; // Es la distancia entre el punto inicial y la carga en x
-	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
-	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
-	Ex = Ex + Q[i]*xi*r3;
-	Ey = Ey + Q[i]*yi*r3;		
+	for(i=0; i<N ; i++){
+	    xi = x0 - X[i]; // Es la distancia entre el punto inicial y la carga en x
+	    yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
+	    r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+	    Ex = Ex + Q[i]*xi*r3;
+	    Ey = Ey + Q[i]*yi*r3;
 	}
 }
 
@@ -63,9 +61,6 @@ double distanciaMinima (double x0, double y0, double X, double Y, int N) {
 	
 	return disMin;
 }
-
-
-
 
 
 
