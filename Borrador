@@ -1,0 +1,42 @@
+#include<stdio.h>
+
+int main (){
+	int numCargas,numLineas; i;
+	float Q[100], X[100], Y[100], Z[100],x0,y0;
+	
+	printf("Ingrese el numero de cargas (menor o igual a 100):\n");
+	scanf("%i",&numCargas);
+	
+	printf("Ingrese el valor de cada carga (en Coulombs).\n");	
+	for (i=0;i<numCargas;i++){
+		printf("Carga %i = ",i+1);
+		scanf("%f",&Q[i]);
+		printf("\n");
+	}
+	
+	printf("Ingrese la coordenada en x para:\n");
+	for (i=0;i<numCargas;i++){
+		printf("Carga %i: ",i+1);
+		scanf("%f",&X[i]);
+		printf("\n");
+	}
+	
+	printf("Ingrese la coordenada en y para:\n");
+	for (i=0;i<numCargas;i++){
+		printf("Carga %i: ",i+1);
+		scanf("%f",&Y[i]);
+		printf("\n");
+	}
+
+	printf("Cuantas lineas desea dibujar?\n");
+	scanf("%i",&numLineas);
+	
+	printf("Ingrese la coordenada en x del punto de referencia:");
+	scanf("%f",&x0);
+	
+	printf("Ingrese la coordenada en y del punto de referencia:");
+	scanf("%f",&y0);
+	
+	
+	return 0;
+}
