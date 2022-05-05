@@ -3,7 +3,7 @@
 #include<iostream.h>
 
 void 
-calculo_campo( double x0, double y_0, double* X, double* Y, double* Q, const int N, double& Ex, double& Ey);
+calculo_campo( double x0, double y_0, double* X, double* Y, double* Q, const int N);
 {
 	int i;
 	double r3, xi, yi;
