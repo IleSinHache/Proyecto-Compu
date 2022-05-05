@@ -2,7 +2,7 @@
 
 int main (){
 	int numCargas,numLineas; i;
-	float Q[100], X[100], Y[100], Z[100],x0,y0;
+	float Q[100], X[100], Y[100], x0,y0;
 	
 	printf("Ingrese el numero de cargas (menor o igual a 100):\n");
 	scanf("%i",&numCargas);
