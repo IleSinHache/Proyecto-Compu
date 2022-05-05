@@ -2,12 +2,11 @@
 #include<math.h>
 #include<iostream>
 
+
+//Funciones para el campo//
  long double calculo_campo_x( double x0, double y0, double X, double Y, double Q, int N);
-
-
-
 long double calculo_campo_y( double x0, double y0, double X, double Y, double Q, int N);
-
+//----------------------//
 
 
 int main ()
@@ -57,8 +56,9 @@ int main ()
 }
 
 
-
-
+////-----------------------------------------------------------------///
+//Funciones para el campo//
+////-----------------------------------------------------------------///
 long double calculo_campo_x( double x0, double y0, double X, double Y, double Q, int N)
 {
 	int i;
@@ -88,6 +88,11 @@ long double calculo_campo_y( double x0, double y0, double X, double Y, double Q,
 	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
 	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
 	Ey = Ey + Q[i]*yi*r3;		
+	
 	}
 	return Ey;
 }
+
+////-----------------------------------------------------------------///
+////-----------------------------------------------------------------///
+////-----------------------------------------------------------------///
