@@ -3,48 +3,6 @@
 #include<iostream.h>
 
 
-//FUNCIONES DISTANCIA// 
-
-float distanciaMaxima (float x0, float y0, float X[], float Y[], int N) {
-    int i;
-	float distancia,disMax = 0.0;
-	
-	for (i=0; i<N; i++){
-		
-		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
-		
-		//Medimos la distancia del punto inicial a cada carga y determinamos
-		//la distancia máxima.
-		
-		if (distancia>disMax){
-			disMax=distancia;
-		}     
-	}
-	
-	return disMax;
-}
-
-float distanciaMinima (float x0, float y0, float X[], float Y[], int N) {
-    int i;
-	float distancia, disMin = 1000;
-	
-	for (i=0; i<N; i++){
-		
-		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
-		
-		//Medimos la distancia del punto inicial a cada carga y determinamos
-		//la distancia mínima.
-		
-		if (distancia<disMin){
-			 disMin=distancia;
-		}     
-		
-		return disMin;
-}
-
-
-
-
 void
 lineas_campo(double x , double y, double* X, double* Y, double* Q, const int N);
 
@@ -130,21 +88,48 @@ int main (){
 		}
 	}
 	
-	//CALCULO DE CAMPOS.
-	for(i=0;i<N;i++){
-		sumando=(Q[i]*(x0-X[i]))/pow((pow((x0-X[i]),2)+pow((y0-Y[i]),2)),1.5);
-		campoEquis=campoEquis+sumando;
-	}
-
-	printf("El campo E_x es %f.\n", k*campoEquis);
-	
-	for(i=0;i<N;i++){
-		sumando=(Q[i]*(y0-Y[i]))/pow((pow((x0-X[i]),2)+pow((y0-Y[i]),2)),1.5);
-		campoYe=campoEquis+sumando;
-	}
-
-	printf("El campo E_y es %f.\n", k*campoYe);
-	
 	return 0;
-	
 }
+
+
+
+//FUNCIONES DISTANCIA// 
+
+float distanciaMaxima (float x0, float y0, float X[], float Y[], int N) {
+    int i;
+	float distancia,disMax = 0.0;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
+		
+		//Medimos la distancia del punto inicial a cada carga y determinamos
+		//la distancia máxima.
+		
+		if (distancia>disMax){
+			disMax=distancia;
+		}     
+	}
+	
+	return disMax;
+}
+
+float distanciaMinima (float x0, float y0, float X[], float Y[], int N) {
+    int i;
+	float distancia, disMin = 1000;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
+		
+		//Medimos la distancia del punto inicial a cada carga y determinamos
+		//la distancia mínima.
+		
+		if (distancia<disMin){
+			 disMin=distancia;
+		}     
+		
+		return disMin;
+}
+
+
