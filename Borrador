@@ -5,9 +5,9 @@
 
 //FUNCIONES DISTANCIA// 
 
-double distanciaMaxima (double x0, double y0, double X, double Y, int N) {
+float distanciaMaxima (float x0, float y0, float X[], float Y[], int N) {
     int i;
-    double distancia, disMax = 0.0;
+	float distancia,disMax = 0.0;
 	
 	for (i=0; i<N; i++){
 		
@@ -17,17 +17,16 @@ double distanciaMaxima (double x0, double y0, double X, double Y, int N) {
 		//la distancia máxima.
 		
 		if (distancia>disMax){
-			 disMax=distancia;
+			disMax=distancia;
 		}     
 	}
 	
 	return disMax;
 }
 
-
-double distanciaMinima (double x0, double y0, double X, double Y, int N) {
+float distanciaMinima (float x0, float y0, float X[], float Y[], int N) {
     int i;
-	double distancia, disMin = 1000;
+	float distancia, disMin = 1000;
 	
 	for (i=0; i<N; i++){
 		
@@ -39,9 +38,8 @@ double distanciaMinima (double x0, double y0, double X, double Y, int N) {
 		if (distancia<disMin){
 			 disMin=distancia;
 		}     
-	}
-	
-	return disMin;
+		
+		return disMin;
 }
 
 
