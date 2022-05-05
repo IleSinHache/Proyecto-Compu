@@ -2,7 +2,7 @@
 
 int main (){
 	int numCargas,numLineas; i;
-	float Q[100], X[100], Y[100], x0,y0;
+	float Q[100], X[100], Y[100];
 	
 	printf("Ingrese el numero de cargas (menor o igual a 100):\n");
 	scanf("%i",&numCargas);
@@ -30,13 +30,6 @@ int main (){
 
 	printf("Cuantas lineas desea dibujar?\n");
 	scanf("%i",&numLineas);
-	
-	printf("Ingrese la coordenada en x del punto de referencia:");
-	scanf("%f",&x0);
-	
-	printf("Ingrese la coordenada en y del punto de referencia:");
-	scanf("%f",&y0);
-	
 	
 	return 0;
 }
