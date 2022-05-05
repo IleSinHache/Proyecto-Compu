@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+int main  ()
+
+{
+	float coeficientes[900], Area[900];
+	int grado;
+	int i, j;
+	int Valor;
+	float a,b;
+	float base, altura, punto,Area_total;
+	int subintervalos;
+	//printf ("Ola pero no ola de mar, ola de hola");
+	printf (" Este es un programa que calcula el area bajo la curva de una función polinómica en un cierto intervalo\n");
+	printf("\n\t*******Favor de escribir el grado del polinomio :D ******\n\t: ");
+	scanf("%d", &grado);
+	i=0;
+	while(i<=grado)
+	{
+		printf("\n\t\t-----Favor de escribir el coeficiente %d-----\n\t\t\t: ", i);
+		scanf("%f", &coeficientes[i]);
+		i++;
+	}
+	
+	
+	printf("Escoge el limite inferior\n ");
+	scanf("%f",&a);
+	printf("Escoge el limite superior\n");
+	scanf("%f",&b);
+	printf("Favor de escoger la forma en que te gustaría calcular el área bajo la curva\n");
+	printf("1. Suma de Riemman por la derecha\n");
+	printf("2. Suma de Riemman por la izquierda\n");
+	printf("3. Suma de Riemman por el punto medio\n");
+	scanf("%i", Valor);
+	printf("Ingrese el numero de subintervalos\n");
+	scanf("%i",&subintervalos);
+	
+	switch	(Valor)
+	{
+		////////////////////Suma por la derecha///////////////////////////
+	 case 1: 
+	       Area_total =0 ;
+	       base = (b-a)/subintervalos;
+	       altura = 0;
+	       punto = a;
+	       for (j=1; j<= subintervalos; j++)
+	       {
+	      punto  = punto + (b-a)/subintervalos;
+	       for(i=0; i<=grado; i++)
+		   {
+	       	altura = coeficientes[i]*pow(punto , i) + altura;
+		   }
+		     Area[i] = base*altura;
+	       }
+	       for(i=0; i<=grado;i++){
+	       	Area_total = Area[i] + Area_total;
+		   }
+		   
+          printf ("El área bajo la curva por la Suma de Riemman por la derecha es: %f ", Area_total);    
+          
+	 break;
+	 
+	 
+	 
+	 ////////////////////////Suma por la izquierda/////////////////////////////
+	 case 2:
+	 	Area_total =0 ;
+	 base = (b-a)/subintervalos ;
+	       altura = 0;
+	       punto =0;
+	       for (j=1; j<= subintervalos; j++)
+	       {
+	      punto  = punto + (b-a)/subintervalos;
+	       for(i=0; i<=grado; i++)
+		   {
+	       	altura = coeficientes[i]*pow(punto , i) + altura;
+		   }
+		     Area[i] = base*altura;
+	       }
+	       for(i=0; i<=grado;i++){
+	       	Area_total = Area[i] + Area_total;
+		   }
+          printf ("El área bajo la curva por la Suma de Riemman por la izquirda es: %f ", Area_total);    
+	 
+	 
+	 break;
+	 
+	 ////////////////////////Suma por el punto medio////////////////////////////////
+	 case 3:
+	 Area_total =0 ;
+	base = (b-a)/subintervalos;
+	       altura = 0;
+	       punto =(b-a)/2;
+	       for (j=1; j<= subintervalos; j++)
+	       {
+	      punto  = punto + (b-a)/subintervalos;
+	       for(i=0; i<=grado; i++)
+		   {
+	       	altura = coeficientes[i]*pow(punto , i) + altura;
+		   }
+		     Area[i] = base*altura;
+	       }
+	       for(i=0; i<=grado;i++){
+	       	Area_total = Area[i] + Area_total;
+		   }
+          printf ("El área bajo la curva por la Suma de Riemman por el punto medio es: %f \n", Area_total);    
+	break;
+	
+	default:
+	printf("Gr");
+	
+	}
+	
+	
+	
