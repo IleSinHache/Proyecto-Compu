@@ -71,7 +71,7 @@ int main (){
 			x0=X[i]+0.1*cos(theta);
 			y0=Y[i]+0.1*sin(theta);
 		    lineas_campo(x0 , y0, X, Y, Q,N);  //Esta funcion cambia los x0,y0
-			printf("El valor de j es: %d\n",j);
+			//printf("El valor de j es: %d\n",j);
 		}
 	}
 	
@@ -105,20 +105,26 @@ void lineas_campo(double xin , double yin, double X[], double Y[], double Q[],  
         rmax= distanciaMaxima (x0, y0, X, Y, N);
         rmin= distanciaMinima (x0, y0, X, Y, N);
         
-        printf("El valor de rmax es: %f \n", rmin);
-		printf("El valor de rmin es: %f \n", rmax);
+        //printf("El valor de rmax es: %f \n", rmin);
+		//printf("El valor de rmin es: %f \n", rmax);
 		
 		while (rmin> (2.0*paso) && rmax < max_dist)
 		{
 			
 		Ex =	calculo_campo_x( x0+0.5*dx, y0+0.5*dy, X,  Y, Q,  N);
 		Ey =	calculo_campo_y( x0+0.5*dx, y0+0.5*dy, X,  Y, Q,  N);
-		
+	     	FILE* lineas_x = fopen("lineas_campo_x.txt", "a+");
+            fprintf(lineas_x , "%f\n",x0);
+	        fclose(lineas_x);
+	        FILE* lineas_y = fopen("lineas_campo_y.txt", "a+");
+            fprintf(lineas_y , "%f\n",y0);
+	        fclose(lineas_y);
+	        
 			printf("%f, %f \n", x0, y0);
-			printf("El valor de Ex de linea de campo es: %f \n", Ex);
-			printf("El valor de Ey de linea de campo es: %f \n", Ey);
+			//printf("El valor de Ex de linea de campo es: %f \n", Ex);
+			//printf("El valor de Ey de linea de campo es: %f \n", Ey);
 			E = sqrt(Ex*Ex +Ey*Ey);
-			printf("El valor de E es: %f \n", E);
+			//printf("El valor de E es: %f \n", E);
 			
 			if(E<= 1.0*pow(10.0, -10.0))
 			{
@@ -155,7 +161,7 @@ void lineas_campo(double xin , double yin, double X[], double Y[], double Q[],  
 	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
 	Ex = Ex + Q[i]*xi*r3;		
 	}
-	printf("El valor de Ex es: %f \n", Ex);
+	//printf("El valor de Ex es: %f \n", Ex);
 	return Ex;
 }
 //--------------------------------------------------------------------------------------//
@@ -172,13 +178,13 @@ void lineas_campo(double xin , double yin, double X[], double Y[], double Q[],  
 	
 	{
 	xi = x0 - X[i];	
-	printf("El valor de xi es: %f \n", xi);
+	//printf("El valor de xi es: %f \n", xi);
 	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
-	printf("El valor de yi es: %f \n", yi);
+	//printf("El valor de yi es: %f \n", yi);
 	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
 	Ey = Ey + Q[i]*yi*r3;		
 	}
-		printf("El valor de Ey es: %f \n", Ey);
+		//printf("El valor de Ey es: %f \n", Ey);
 	return Ey;
 }
 //--------------------------------------------------------------------------------------//
