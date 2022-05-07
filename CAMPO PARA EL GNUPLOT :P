@@ -1,0 +1,247 @@
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+double distanciaMaxima (double x0, double y0, double X[], double Y[], int N);
+double distanciaMinima (double x0, double y0, double X[], double Y[], int N);
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+                //FUNCIÓN QUE DA LOS PUNTOS DE LA LINEA DE CAMPO//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+void lineas_campo(double xin, double yin, double X[], double Y[], double Q[], int N);
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+                        //FUNCION POTENCIAL ELECTRICO//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+double potencial(double xin, double yin, double X[], double Y[], double Q[], int N);
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+                             //FUNCION DE CAMPO//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+double calculo_campo_x( double x0, double y0, double X[], double Y[], double Q[], int N);
+double calculo_campo_y( double x0, double y0, double X[], double Y[], double Q[], int N);
+//------------------------------------------------------------------------------//
+//------------------------------------------------------------------------------//
+//------------------------------------------------------------------------------//
+
+
+int main (){
+	
+	const double PI=3.141592653589;
+	int N, i,j;
+	double Q[20], X[20], Y[20],n,theta,x0,y0,Ex,Ey,rmin,rmax;
+	
+	printf("Ingrese el numero de cargas (menor o igual a 100):\n");
+	scanf("%d",&N);
+	
+	printf("Ingrese el valor de cada carga (en Coulombs).\n");	
+	for (i=0;i<N;i++){
+		printf("Carga %d = ",i+1);
+		scanf("%lf",&Q[i]);
+		printf("\n");
+	}
+	
+	printf("Ingrese la coordenada en x para:\n");
+	for (i=0;i<N;i++){
+		printf("Carga %d: ",i+1);
+		scanf("%lf",&X[i]);
+		printf("\n");
+	}
+	
+	printf("Ingrese la coordenada en y para:\n");
+	for (i=0;i<N;i++){
+		printf("Carga %d: ",i+1);
+		scanf("%lf",&Y[i]);
+		printf("\n");
+	}
+	
+	//DIBUJAR LINEAS.
+	//Dibujamos 2*n lineas de campo alrededor de cada carga.
+	
+	n=6;
+	for(i=0;i<N;i++){
+		//printf("***************************************El valor de i es: %d\n",i);
+		for(j=1;j<=2*n;j++){
+			//printf("El valor de j es: %d\n",j);
+			fflush(stdin);
+			theta=(PI/n)*j;
+			x0=X[i]+0.1*cos(theta);
+			y0=Y[i]+0.1*sin(theta);
+		    lineas_campo(x0 , y0, X, Y, Q,N);  //Esta funcion cambia los x0,y0
+			
+		}
+			
+	}
+	printf("Terminamos :D \n");
+	return 0;
+	
+}
+
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+                    //Función que garfica las lineas de campo//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+void lineas_campo(double xin , double yin, double X[], double Y[], double Q[],  int N)
+
+{
+	const double  paso = 0.01;
+	const double  max_dist = 20.0;
+	int            i, direccion ;
+	double         x0, y0;
+	double         rmin, rmax, r, dx, dy,dl;
+	double          Ex, Ey, E;	
+	for(direccion = -1; direccion<= 1; direccion +=2)
+	{
+		dl = direccion * paso;
+		x0 = xin;
+		y0 = yin;
+		dx = 0.0;
+		dy = 0.0;
+        rmax= distanciaMaxima (x0, y0, X, Y, N);
+        rmin= distanciaMinima (x0, y0, X, Y, N);
+        
+        //printf("El valor de rmax es: %f \n", rmin);
+		//printf("El valor de rmin es: %f \n", rmax);
+		
+		while (rmin> (2.0*paso) && rmax < max_dist)
+		{
+			
+		Ex =	calculo_campo_x( x0+0.5*dx, y0+0.5*dy, X,  Y, Q,  N);
+		Ey =	calculo_campo_y( x0+0.5*dx, y0+0.5*dy, X,  Y, Q,  N);
+	     FILE* lineas = fopen("lineas_campo.txt", "a+");
+            fprintf(lineas , "%f\t%f\n",x0,y0);
+	        fclose(lineas);
+	       
+	        
+			//printf("%f, %f \n", x0, y0);
+			//printf("El valor de Ex de linea de campo es: %f \n", Ex);
+			//printf("El valor de Ey de linea de campo es: %f \n", Ey);
+			E = sqrt(Ex*Ex +Ey*Ey);
+			//printf("El valor de E es: %f \n", E);
+			
+			if(E<= 8.5*pow(10.0, -3.0))
+			{
+				 break;
+			}
+			if(E>= 1.0*pow(10.0, 3.0))
+			{
+				 break;
+			}
+			
+			dx = dl*Ex/E;
+			dy = dl*Ey/E;
+			//printf("El valor de dx es: %f\n", dx);
+			//printf("El valor de dy es: %f\n", dy);
+			x0 = x0 + dx;
+			y0 = y0 + dy;
+			rmax= distanciaMaxima (x0, y0, X, Y, N);
+            rmin= distanciaMinima (x0, y0, X, Y, N);
+		}
+	}	
+	
+}
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+                         // FUNCIÓN DE CAMPO EN X Y EN Y//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+ double calculo_campo_x( double x0, double y0, double X[], double Y[], double Q[], int N)
+{
+	int i;
+	double xi,yi;
+	 double r3;
+    double Ex;
+	Ex = 0.0 ;
+	for(i=0; i<N ; i++)
+	
+	{
+	xi = x0 - X[i]; // Es la distancia entre el punto inicial y la carga en x
+	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
+	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+	Ex = Ex + Q[i]*xi*r3;		
+	}
+	//printf("El valor de Ex es: %f \n", Ex);
+	return Ex;
+}
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+ double calculo_campo_y( double x0, double y0, double X[], double Y[], double Q[], int N)
+{
+	int i;
+	double yi, xi;
+    double r3;
+	 double Ey;
+	Ey = 0.0;
+	for(i=0; i<N ; i++)
+	
+	{
+	xi = x0 - X[i];	
+	//printf("El valor de xi es: %f \n", xi);
+	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
+	//printf("El valor de yi es: %f \n", yi);
+	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+	//printf("El valor de r3 es: %f \n", r3);
+	Ey = Ey + Q[i]*yi*r3;		
+	}
+		//printf("El valor de Ey es: %f \n", Ey);
+	return Ey;
+}
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//                                
+//--------------------------------------------------------------------------------------//
+
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+                        //FUNCIONES DISTANCIA MAXIMA Y MINIMA// 
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+double distanciaMaxima (double x0, double y0, double X[], double Y[], int N) 
+{
+        int i;
+	double distancia,disMax = 0.0;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
+		
+		//Medimos la distancia del punto inicial a cada carga y determinamos
+		//la distancia máxima.
+		
+		if (distancia>disMax){
+			disMax=distancia;
+		}     
+	}
+	
+	return disMax;
+}
+
+double distanciaMinima (double x0, double y0, double X[], double Y[], int N) {
+        int i;
+	double distancia, disMin = 1000;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x0-X[i]),2) + pow((y0-Y[i]),2));
+		
+		//Medimos la distancia del punto inicial a cada carga y determinamos
+		//la distancia mínima.
+		
+		if (distancia<disMin){
+			 disMin=distancia;
+		}     
+		
+		return disMin;
+}}
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//--------------------------------------------------------------------------------------//
