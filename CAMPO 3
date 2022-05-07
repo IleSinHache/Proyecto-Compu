@@ -34,7 +34,7 @@ int main (){
 	
 	const double PI=3.141592653589;
 	int N, i,j;
-	double Q[100], X[100], Y[100],n,theta,x0,y0,Ex,Ey,rmin,rmax;
+	double Q[20], X[20], Y[20],n,theta,x0,y0,Ex,Ey,rmin,rmax;
 	
 	printf("Ingrese el numero de cargas (menor o igual a 100):\n");
 	scanf("%d",&N);
@@ -65,16 +65,19 @@ int main (){
 	
 	n=6;
 	for(i=0;i<N;i++){
+		//printf("***************************************El valor de i es: %d\n",i);
 		for(j=1;j<=2*n;j++){
+			//printf("El valor de j es: %d\n",j);
 			fflush(stdin);
 			theta=(PI/n)*j;
 			x0=X[i]+0.1*cos(theta);
 			y0=Y[i]+0.1*sin(theta);
 		    lineas_campo(x0 , y0, X, Y, Q,N);  //Esta funcion cambia los x0,y0
-			//printf("El valor de j es: %d\n",j);
+			
 		}
+			
 	}
-	
+	printf("Terminamos :D \n");
 	return 0;
 	
 }
@@ -113,26 +116,32 @@ void lineas_campo(double xin , double yin, double X[], double Y[], double Q[],  
 			
 		Ex =	calculo_campo_x( x0+0.5*dx, y0+0.5*dy, X,  Y, Q,  N);
 		Ey =	calculo_campo_y( x0+0.5*dx, y0+0.5*dy, X,  Y, Q,  N);
-	     	FILE* lineas_x = fopen("lineas_campo_x.txt", "a+");
+	     	FILE* lineas_x = fopen("lineas_campo_x2.txt", "a+");
             fprintf(lineas_x , "%f\n",x0);
 	        fclose(lineas_x);
-	        FILE* lineas_y = fopen("lineas_campo_y.txt", "a+");
+	        FILE* lineas_y = fopen("lineas_campo_y2.txt", "a+");
             fprintf(lineas_y , "%f\n",y0);
 	        fclose(lineas_y);
 	        
-			printf("%f, %f \n", x0, y0);
+			//printf("%f, %f \n", x0, y0);
 			//printf("El valor de Ex de linea de campo es: %f \n", Ex);
 			//printf("El valor de Ey de linea de campo es: %f \n", Ey);
 			E = sqrt(Ex*Ex +Ey*Ey);
 			//printf("El valor de E es: %f \n", E);
 			
-			if(E<= 1.0*pow(10.0, -10.0))
+			if(E<= 8.5*pow(10.0, -3.0))
+			{
+				 break;
+			}
+			if(E>= 1.0*pow(10.0, 3.0))
 			{
 				 break;
 			}
 			
 			dx = dl*Ex/E;
 			dy = dl*Ey/E;
+			//printf("El valor de dx es: %f\n", dx);
+			//printf("El valor de dy es: %f\n", dy);
 			x0 = x0 + dx;
 			y0 = y0 + dy;
 			rmax= distanciaMaxima (x0, y0, X, Y, N);
@@ -182,6 +191,7 @@ void lineas_campo(double xin , double yin, double X[], double Y[], double Q[],  
 	yi = y0 -Y[i];  // Es la distancia entre el punto unicial y la carga en y
 	//printf("El valor de yi es: %f \n", yi);
 	r3 = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+	//printf("El valor de r3 es: %f \n", r3);
 	Ey = Ey + Q[i]*yi*r3;		
 	}
 		//printf("El valor de Ey es: %f \n", Ey);
