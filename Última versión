@@ -1,0 +1,233 @@
+/*--------------------------------------------------------------------------------------
+Benemérita Universidad Autónoma de Puebla
+Física Computacional: Proyecto Final
+Elaborado por José Ramón García Gonzáles e Ileana Jocelyn Domínguez Guillén
+Puebla de Zaragoza a 7 de mayo del 2022
+--------------------------------------------------------------------------------------*/
+
+
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+
+double distanciaMaxima (double x0, double y0, double X[], double Y[], int N);
+double distanciaMinima (double x0, double y0, double X[], double Y[], int N);
+/*--------------------------------------------------------------------------------------
+FUNCIONES QUE CALCULAN LA DISTANCIA MINIMA (MÁXIMA) ENTRE UNA CARGA	Y EL RESTO.
+--------------------------------------------------------------------------------------*/
+
+double calculo_campo_x( double x0, double y0, double X[], double Y[], double Q[], int N);
+double calculo_campo_y( double x0, double y0, double X[], double Y[], double Q[], int N);
+/*--------------------------------------------------------------------------------------
+FUNCIONES QUE CALCULAN LA COMPONENTE EN "X" Y "Y" DEL CAMPO ELECTRICO EN (x0,y0).
+--------------------------------------------------------------------------------------*/
+
+void lineas_campo(double xin, double yin, double X[], double Y[], double Q[], int N);
+/*--------------------------------------------------------------------------------------
+FUNCIÓN QUE GENERA E IMPRIME PUNTOS SOBRE LAS LINEAS DE CAMPO.
+--------------------------------------------------------------------------------------*/
+
+
+int main (){
+	
+	const double PI=3.141592653589;
+	int numCargas, i, j;
+	double Q[20], X[20], Y[20], n, theta, x0, y0;
+	
+	printf("---PROYECTO FINAL: LINEAS DE CAMPO ELECTRICO---\n\n\n");
+	printf("Programa que crea archivos para graficar lineas de campo electrico de un conjunto de cargas.\n\n");
+	
+	
+	printf("Ingrese el numero de cargas (menor o igual a 20):\n");
+	scanf("%d",&numCargas);
+	
+	printf("Ingrese el valor de cada carga (en Coulombs).\n");	
+	for (i=0;i<numCargas;i++){
+		printf("Carga %d = ",i+1);
+		scanf("%lf",&Q[i]);
+		printf("\n");
+	}
+	
+	printf("Ingrese las siguientes coordenadas:\n");
+	for (i=0;i<numCargas;i++){
+		printf("Carga %i.\n",i+1);
+		
+		printf("Coordenada x: ");
+		scanf("%lf",&X[i]);
+		
+		printf("\nCoordenada y: ");
+		scanf("%lf",&Y[i]);
+		
+		printf("\n");
+	}
+	
+	//DIBUJAR LINEAS.
+	//Dibujamos 2*n lineas de campo alrededor de cada carga
+	
+	n=6;
+	printf("Generando datos para graficar las lineas de campo...\n");
+	
+	for(i=0;i<numCargas;i++){
+		for(j=1;j<=2*n;j++){
+			fflush(stdin);
+			theta=(PI/n)*j;
+			x0=X[i]+0.1*cos(theta);
+			y0=Y[i]+0.1*sin(theta);//x0 y y0 forman parte de un círculo con centro en (X[i],Y[i])
+			                       //y radio 0.1. Tomamos 12 puntos alrededor de cada carga
+			                       //Se grafica una linea a partir de cada punto
+		    lineas_campo(x0, y0, X, Y, Q, numCargas);//Esta función genera los datos para graficar las lineas de campo
+		}
+			
+	}
+	
+	printf("Terminamos :D\nGracias por usar el programa! \n");
+	return 0;
+	
+}
+
+/*--------------------------------------------------------------------------------------
+                                      FUNCIONES
+--------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------
+FUNCIÓN QUE CALCULA LA DISTANCIA MÁXIMA ENTRE UNA CARGA Y EL RESTO.
+--------------------------------------------------------------------------------------*/
+
+double distanciaMaxima (double x, double y, double X[], double Y[], int N){
+	int i;
+	double distancia, disMax = 0.0;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x-X[i]),2) + pow((y-Y[i]),2));
+		
+		/*Medimos la distancia de (x,y) a cada carga y determinamos
+		la distancia máxima por comparación.*/
+		
+		if (distancia>disMax){
+			disMax=distancia;
+		}     
+	}
+	
+	return disMax;
+}
+
+/*--------------------------------------------------------------------------------------
+FUNCIÓN QUE CALCULA LA DISTANCIA MÍNIMA ENTRE UNA CARGA Y EL RESTO.
+--------------------------------------------------------------------------------------*/
+
+double distanciaMinima (double x, double y, double X[], double Y[], int N){
+	int i;
+	double distancia, disMin = 1000;
+	
+	for (i=0; i<N; i++){
+		
+		distancia=sqrt(pow((x-X[i]),2) + pow((y-Y[i]),2));
+		
+		/*Medimos la distancia de (x,y) a cada carga y determinamos
+		la distancia mínima por comparación.*/
+		
+		if (distancia<disMin){
+			 disMin=distancia;
+		}     
+		
+		return disMin;
+		
+    }
+}
+
+/*--------------------------------------------------------------------------------------
+FUNCIÓN QUE CALCULA LA COMPONENTE EN "X" DEL CAMPO ELECTRICO EN (x,y).
+--------------------------------------------------------------------------------------*/
+
+double calculo_campo_x(double x, double y, double X[], double Y[], double Q[], int N){
+	//E_x=k\sum_{i=0}^{N-1}\frac{Q_i(x-x_i)}{((x-x_i)^2+(x-x_i)^2)^{1.5}}
+	//No multiplicamos por la constante de Coulomb porque el procedimiento es equivalente sin esta
+	
+	int i;
+	double xi,yi,r,Ex=0.0;
+	
+	for(i=0; i<N ; i++){
+		xi = x - X[i]; // Diferencia de x y la coordenada en "x" de la carga i+1
+		yi = y -Y[i];  // Diferencia de y y la coordenada en "y" de la carga i+1
+		r = pow(xi*xi + yi*yi, -1.5); //Denominador de ecuación para E_x
+		Ex = Ex + Q[i]*xi*r;	
+	}
+	return Ex;
+}
+
+/*--------------------------------------------------------------------------------------
+FUNCIÓN QUE CALCULA LA COMPONENTE EN "Y" DEL CAMPO ELECTRICO EN (x0,y0).
+--------------------------------------------------------------------------------------*/
+
+double calculo_campo_y(double x, double y, double X[], double Y[], double Q[], int N){
+	//E_y=k\sum_{i=0}^{N-1}\frac{Q_i(y-y_i)}{((x-x_i)^2+(x-x_i)^2)^{1.5}}
+	//No multiplicamos por la constante de Coulomb porque el procedimiento es equivalente sin esta
+	int i;
+	double yi, xi,r,Ey=0.0;
+  
+	for(i=0; i<N ; i++){
+		xi = x - X[i];	
+		yi = y -Y[i];  // Es la distancia entre el punto unicial y la carga en y
+		r = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+		Ey = Ey + Q[i]*yi*r;		
+	}
+	
+	return Ey;
+}
+
+/*--------------------------------------------------------------------------------------
+FUNCIÓN QUE GENERA E IMPRIME PUNTOS SOBRE LAS LINEAS DE CAMPO.
+--------------------------------------------------------------------------------------*/
+
+void lineas_campo(double x, double y, double X[], double Y[], double Q[],  int N){
+	const double  paso = 0.01; //Distancia entre cada punto de una linea de campo
+	const double  max_dist = 20.0; //Máxima distancia entre el punto de origen y un punto de linea de campo
+	int           i, direccion; //Dirección nos da el sentido en el que se grafican las lineas
+	double        x0, y0;
+	double        rmin, rmax;//rmin y rmax son variables auxiliares para usar las funciones DistanciaMinima y DistanciaMaxima
+	double        dx, dy,dl; //Variables que nos dan la diferencia espacial entre los puntos de la linea de campo
+	double        Ex, Ey, E;//Ex y Ey son variables auxiliares para llamar a las funciones calculo_campo_x y calculo_campo_y	
+	
+	for(direccion = -1; direccion<= 1; direccion +=2){
+		dl = direccion * paso;
+		x0 = x;
+		y0 = y;
+		dx = 0.0;
+		dy = 0.0;
+		
+        rmax= distanciaMaxima (x0, y0, X, Y, N);
+        rmin= distanciaMinima (x0, y0, X, Y, N);
+        
+		
+		while (rmin> (2.0*paso) && rmax < max_dist){
+			Ex = calculo_campo_x( x0+0.5*dx, y0+0.5*dy, X,  Y, Q, N);
+		    Ey = calculo_campo_y( x0+0.5*dx, y0+0.5*dy, X,  Y, Q, N);
+		    
+	     	FILE* lineas_x = fopen("lineas_campo_x.txt", "a+");//Se abre el archivo "lineas_campo_x2.txt"
+            fprintf(lineas_x , "%f\n",x0);//Se imprime en el archivo las coordenadas "x"
+	        fclose(lineas_x);//Se cierra el archivo "lineas_campo_x.txt"
+	        
+	        FILE* lineas_y = fopen("lineas_campo_y.txt", "a+");//Se abre el archivo "lineas_campo_x2.txt"
+            fprintf(lineas_y , "%f\n",y0);//Se imprime en el archivo las coordenadas "y"
+	        fclose(lineas_y);//Se cierra el archivo "lineas_campo_y.txt"
+	        		
+			E = sqrt(Ex*Ex +Ey*Ey);//Magnitud del campo eléctrico en (x0,y0) dividida por k
+			
+			if(E<= 8.5*pow(10.0, -3.0)||E>= 1.0*pow(10.0, 3.0)){
+				 break;//Estas condiciones nos permiten salir del ciclo "while" si la magnitud del campo es 
+				       //muy grande o chica para los fines del programa
+			}
+			
+			dx = dl*Ex/E;//Avance en "x" (delta x)
+			dy = dl*Ey/E;//Avance en "y" (delta y)
+
+			x0 = x0 + dx;
+			y0 = y0 + dy;//Coordenadas del nuevo punto de partida
+			
+			rmax= distanciaMaxima (x0, y0, X, Y, N);
+            rmin= distanciaMinima (x0, y0, X, Y, N);
+		}
+	}	
+}
+ 
