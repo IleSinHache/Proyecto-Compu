@@ -201,23 +201,19 @@ void lineas_campo(double x, double y, double X[], double Y[], double Q[],  int N
         
 		
 		while (rmin> (2.0*paso) && rmax < max_dist){
-			Ex = calculo_campo_x( x0+0.5*dx, y0+0.5*dy, X,  Y, Q, N);
+		    Ex = calculo_campo_x( x0+0.5*dx, y0+0.5*dy, X,  Y, Q, N);
 		    Ey = calculo_campo_y( x0+0.5*dx, y0+0.5*dy, X,  Y, Q, N);
 		    
-	     	FILE* lineas_x = fopen("lineas_campo_x.txt", "a+");//Se abre el archivo "lineas_campo_x2.txt"
-            fprintf(lineas_x , "%f\n",x0);//Se imprime en el archivo las coordenadas "x"
-	        fclose(lineas_x);//Se cierra el archivo "lineas_campo_x.txt"
-	        
-	        FILE* lineas_y = fopen("lineas_campo_y.txt", "a+");//Se abre el archivo "lineas_campo_x2.txt"
-            fprintf(lineas_y , "%f\n",y0);//Se imprime en el archivo las coordenadas "y"
-	        fclose(lineas_y);//Se cierra el archivo "lineas_campo_y.txt"
+	     	    FILE* lineas = fopen("lineas_campo.txt", "a+");//Generamos el archivo donde se almacenarán los datos
+                    fprintf(lineas , "%f\t%f\n",x0,y0);//Se imprimen las coordenadas "x" y "y" dentro del archivo
+	            fclose(lineas);//Se cierra el archivo
 	        		
-			E = sqrt(Ex*Ex +Ey*Ey);//Magnitud del campo eléctrico en (x0,y0) dividida por k
+		    E = sqrt(Ex*Ex +Ey*Ey);//Magnitud del campo eléctrico en (x0,y0) dividida por k
 			
-			if(E<= 8.5*pow(10.0, -3.0)||E>= 1.0*pow(10.0, 3.0)){
+		     if(E<= 8.5*pow(10.0, -3.0)||E>= 1.0*pow(10.0, 3.0)){
 				 break;//Estas condiciones nos permiten salir del ciclo "while" si la magnitud del campo es 
 				       //muy grande o chica para los fines del programa
-			}
+		     }
 			
 			dx = dl*Ex/E;//Avance en "x" (delta x)
 			dy = dl*Ey/E;//Avance en "y" (delta y)
@@ -226,8 +222,10 @@ void lineas_campo(double x, double y, double X[], double Y[], double Q[],  int N
 			y0 = y0 + dy;//Coordenadas del nuevo punto de partida
 			
 			rmax= distanciaMaxima (x0, y0, X, Y, N);
-            rmin= distanciaMinima (x0, y0, X, Y, N);
+                        rmin= distanciaMinima (x0, y0, X, Y, N);
 		}
 	}	
 }
+ 
+
  
