@@ -169,7 +169,7 @@ double calculo_campo_y(double x, double y, double X[], double Y[], double Q[], i
 	for(i=0; i<N ; i++){
 		xi = x - X[i];	
 		yi = y -Y[i];  // Es la distancia entre el punto unicial y la carga en y
-		r = pow(xi*xi + yi*yi, -1.5); /* Es la parte del denominador de la formula del campo*/ 
+		r = pow(xi*xi + yi*yi, -1.5); //Denominador de ecuación para E_y
 		Ey = Ey + Q[i]*yi*r;		
 	}
 	
